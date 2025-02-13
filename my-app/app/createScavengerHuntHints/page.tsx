@@ -121,7 +121,6 @@ export default function ScavengerHuntHintDetails() {
       }
     }
   };
-  
 
   const deleteHint = (slideId: number, hintId: number) => {
     setSlides(slides.map(slide => {
@@ -154,26 +153,37 @@ export default function ScavengerHuntHintDetails() {
   // Submit function to send the scavenger hunt data and navigate to home page
   const submitFunction = async () => {
     try {
+      // Get hunt data from localStorage
+      const huntData = JSON.parse(localStorage.getItem("scavengerHuntData") || '{}');
+      
       const selectedSlides = slides.map(slide => ({
         hints: slide.hints,
         background: slide.background, // Send the background URL
       }));
-
+  
       const response = await fetch("/api/submitScavengerHunt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: "My Scavenger Hunt", // Replace with dynamic title if needed
+          title: huntData.name, // Set the title to the name from huntData
           slides: selectedSlides,
+          tags: huntData.tags, // Include tags
+          location: huntData.location, // Include location
+          isPrivate: huntData.isPrivate, // Include isPrivate
+          password: huntData.password, // Include password
           background: selectedSlides.length > 0 ? selectedSlides[0].background : "", // Global background (if applicable)
         }),
       });
-
+  
       const data = await response.json();
       if (response.ok) {
         console.log("Scavenger Hunt Submitted Successfully", data);
+        
+        // Clear local storage before navigating
+        localStorage.clear();
+        
         router.push("/"); // Navigate to home page after successful submission
       } else {
         console.error("Failed to submit scavenger hunt", data);
@@ -182,6 +192,8 @@ export default function ScavengerHuntHintDetails() {
       console.error("Error submitting scavenger hunt", error);
     }
   };
+  
+  
 
   return (
     <div className="flex flex-col h-screen w-full bg-gray-100">
