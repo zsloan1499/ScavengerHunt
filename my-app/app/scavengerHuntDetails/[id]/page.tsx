@@ -66,7 +66,7 @@ export default function ScavengerHuntDetails() {
   const selectedHint = selectedLocation?.hints[selectedHintIndex];
 
   // Dynamically update the background image based on the selected location
-  const backgroundImageUrl = selectedLocation?.photos?.[0] || "No URL"; // Default if no photo available
+  const backgroundImageUrl = selectedLocation?.photos?.length > 0 ? selectedLocation.photos[0] : null;
 
   return (
     <div className="flex flex-col items-center w-full min-h-screen bg-gray-100">
@@ -84,11 +84,11 @@ export default function ScavengerHuntDetails() {
       <div className="w-full mt-6 p-6 bg-white rounded-lg shadow-lg flex flex-col items-center">
         {/* Background Image or Default White Background */}
         <div
-          className={`w-full h-[calc(100vh-50vh)] relative rounded-lg shadow-md bg-center ${selectedLocation?.photos?.length > 0 ? 'bg-cover' : 'bg-white'}`}
+          className={`w-full h-[calc(100vh-50vh)] relative rounded-lg shadow-md bg-center ${backgroundImageUrl ? 'bg-cover' : 'bg-gray-300'}`}
           style={{
-            backgroundImage: selectedLocation?.photos?.length > 0 ? `url(${selectedLocation.photos[0]})` : 'none',
-            backgroundSize: selectedLocation?.photos?.length > 0 ? 'cover' : 'auto',
-            backgroundPosition: selectedLocation?.photos?.length > 0 ? 'center' : 'unset',
+            backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : "none",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         >
           {/* Slide Content */}
