@@ -1,2 +1,2 @@
 # ScavengerHunt
-To make custom scavenger huntsa
+To make custom scavenger hunts
