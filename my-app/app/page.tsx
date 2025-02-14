@@ -1,9 +1,16 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
+// Define the scavenger hunt type
+type ScavengerHunt = {
+  _id: string;
+  title: string;
+  description?: string; // Optional field
+};
+
 export default function Home() {
-  const [scavengerHunts, setScavengerHunts] = useState<any[]>([]);
+  const [scavengerHunts, setScavengerHunts] = useState<ScavengerHunt[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -11,7 +18,7 @@ export default function Home() {
       try {
         const response = await fetch("/api/getAllScavengerHunts");
         if (response.ok) {
-          const data = await response.json();
+          const data: ScavengerHunt[] = await response.json(); // Explicitly typing response data
           setScavengerHunts(data);
         } else {
           console.error("Failed to fetch scavenger hunts.");

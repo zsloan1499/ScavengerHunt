@@ -128,22 +128,21 @@ export default function ScavengerHuntHintDetails() {
         // Remove the hint from the current slide
         const newHints = slide.hints.filter(hint => hint.id !== hintId);
         
-        // Renumber the hints
-        const updatedHints = newHints.map((hint, index) => ({
-          ...hint,
-          id: Date.now(), // Reset the hint ID (optional, depends on your preference)
-          content: hint.content, // Retain the content
-        }));
-
-        return { ...slide, hints: updatedHints };
+        return { ...slide, hints: newHints };
       }
       return slide;
     }));
-
-    // If the last hint is deleted, go to the previous hint or first one
-    if (selectedHintIndex === slide.hints.length - 1) {
-      setSelectedHintIndex(selectedHintIndex > 0 ? selectedHintIndex - 1 : 0);
-    }
+  
+    // Ensure we use the updated hints count
+    setSlides(prevSlides => {
+      const currentSlide = prevSlides.find(slide => slide.id === slideId);
+      const updatedHintsLength = currentSlide?.hints.length ?? 0;
+  
+      // If the last hint is deleted, go to the previous hint or reset
+      setSelectedHintIndex(updatedHintsLength > 0 ? updatedHintsLength - 1 : 0);
+      
+      return prevSlides; // Return unchanged slides
+    });
   };
 
   // Safe access to selected slide and hints

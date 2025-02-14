@@ -1,12 +1,26 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
+// Define the scavenger hunt type
+type Location = {
+  hints: string[];
+  photos?: string[];
+};
+
+type ScavengerHunt = {
+  _id: string;
+  title: string;
+  locations: Location[];
+  isPublic: boolean;
+  password?: string;
+};
+
 export default function ScavengerHuntDetails() {
   const params = useParams();
-  const id = params?.id;
-  const [hunt, setHunt] = useState<any | null>(null);
+  const id = params?.id as string;
+  const [hunt, setHunt] = useState<ScavengerHunt | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedLocationIndex, setSelectedLocationIndex] = useState(0);
   const [selectedHintIndex, setSelectedHintIndex] = useState(0);
@@ -18,7 +32,7 @@ export default function ScavengerHuntDetails() {
       try {
         const response = await fetch(`/api/getDisplayScavengerHunt?id=${id}`);
         if (response.ok) {
-          const data = await response.json();
+          const data: ScavengerHunt = await response.json();
           setHunt(data);
         } else {
           console.error("Failed to fetch scavenger hunt details.");
@@ -66,7 +80,7 @@ export default function ScavengerHuntDetails() {
   const selectedHint = selectedLocation?.hints[selectedHintIndex];
 
   // Dynamically update the background image based on the selected location
-  const backgroundImageUrl = selectedLocation?.photos?.length > 0 ? selectedLocation.photos[0] : null;
+  const backgroundImageUrl = selectedLocation?.photos?.length ? selectedLocation.photos[0] : null;
 
   return (
     <div className="flex flex-col items-center w-full min-h-screen bg-gray-100">

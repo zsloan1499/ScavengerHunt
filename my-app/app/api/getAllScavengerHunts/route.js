@@ -2,7 +2,7 @@ import ScavengerHuntModel from "../../models/ScavengerHuntModel";
 import connectToDatabase from "../../../lib/mongodb";
 
 // Handle GET requests
-export async function GET(req) {
+export async function GET() { 
   try {
     // Ensure database connection is established
     await connectToDatabase();
