@@ -26,9 +26,13 @@ const scavengerHuntSchema: Schema = new Schema({
       photos: { type: [String], default: [] },
     },
   ],
-  backgroundPhoto: { type: String, required: true },
+  // Make backgroundPhoto optional by removing the `required: true`
+  backgroundPhoto: { type: String, required: false },
   isPublic: { type: Boolean, required: true, default: true },
-  password: { type: String, required: function (this: IScavengerHunt) { return !this.isPublic; } },
+  password: { 
+    type: String, 
+    required: function (this: IScavengerHunt) { return !this.isPublic; } 
+  },
 });
 
 // Create or reuse the model
